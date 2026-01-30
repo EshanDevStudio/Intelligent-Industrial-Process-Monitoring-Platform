@@ -2,6 +2,7 @@ package com.eshan.backend.mqtt_client.service;
 
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,18 @@ public class MqttService {
         } catch (Exception e) {
             logger.error("Failed to connect or subscribe to MQTT broker", e);
             throw new RuntimeException("MQTT connection failed", e);
+        }
+    }
+
+    @PreDestroy
+    public void disconnect() {
+        if(mqtt5Client != null && mqtt5Client.getState().isConnected()) {
+            try {
+                mqtt5Client.disconnect();
+                logger.info("MQTT Client disconnected");
+            } catch (Exception e) {
+                throw new RuntimeException("Error disconnecting MQTT client", e);
+            }
         }
     }
 
