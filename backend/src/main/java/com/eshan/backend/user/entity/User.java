@@ -1,4 +1,4 @@
-package com.eshan.backend.security.entity;
+package com.eshan.backend.user.entity;
 
 import jakarta.persistence.*;
 
