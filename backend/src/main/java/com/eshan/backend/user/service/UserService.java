@@ -4,6 +4,7 @@ import com.eshan.backend.user.dto.RegisterRequest;
 import com.eshan.backend.user.entity.User;
 import com.eshan.backend.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,6 +12,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User registerUser(RegisterRequest registerRequest) {
 
@@ -28,7 +32,7 @@ public class UserService {
         User user =  new User(
                 registerRequest.getUsername(),
                 registerRequest.getEmail(),
-                registerRequest.getPassword()
+                passwordEncoder.encode(registerRequest.getPassword())
         );
 
         //Assign default role
