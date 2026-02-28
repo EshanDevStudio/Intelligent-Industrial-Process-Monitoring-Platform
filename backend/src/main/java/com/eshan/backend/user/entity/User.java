@@ -39,8 +39,18 @@ public class User {
         createdAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
+    // Constructure
 
+    public User() {
+    }
+
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    // Getters and Setters
 
     public Long getId() {
         return id;
