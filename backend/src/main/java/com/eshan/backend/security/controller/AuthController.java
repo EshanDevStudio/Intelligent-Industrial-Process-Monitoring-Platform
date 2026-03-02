@@ -1,8 +1,9 @@
 package com.eshan.backend.security.controller;
 
-import com.eshan.backend.user.dto.ErrorResponse;
-import com.eshan.backend.user.dto.RegisterRequest;
-import com.eshan.backend.user.dto.RegisterResponse;
+import com.eshan.backend.dto.ErrorResponse;
+import com.eshan.backend.dto.RegisterRequest;
+import com.eshan.backend.dto.RegisterResponse;
+import com.eshan.backend.security.service.AuthService;
 import com.eshan.backend.user.entity.User;
 import com.eshan.backend.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @Autowired
-    private UserService userService;
+    private AuthService authService;
 
     @PostMapping("/register-user")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
         try {
-            User user = userService.registerUser(registerRequest);
+            User user = authService.registerUser(registerRequest);
 
             RegisterResponse response = new RegisterResponse(
                     "User registered successfully",

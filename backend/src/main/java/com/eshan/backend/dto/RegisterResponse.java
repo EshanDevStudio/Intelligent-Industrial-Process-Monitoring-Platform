@@ -1,4 +1,4 @@
-package com.eshan.backend.user.dto;
+package com.eshan.backend.dto;
 
 public class RegisterResponse {
     private String message;
