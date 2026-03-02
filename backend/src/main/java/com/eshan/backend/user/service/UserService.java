@@ -1,6 +1,6 @@
 package com.eshan.backend.user.service;
 
-import com.eshan.backend.user.dto.RegisterRequest;
+import com.eshan.backend.dto.RegisterRequest;
 import com.eshan.backend.user.entity.User;
 import com.eshan.backend.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

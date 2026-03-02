@@ -1,4 +1,4 @@
-package com.eshan.backend.user.dto;
+package com.eshan.backend.dto;
 
 import java.util.Map;
 
@@ -7,7 +7,6 @@ public class ErrorResponse {
     private Map<String, String> details;
 
     // Constructor
-
     public ErrorResponse() {
     }
 

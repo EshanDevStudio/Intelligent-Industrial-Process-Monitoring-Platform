@@ -1,8 +1,8 @@
 package com.eshan.backend.security.controller;
 
-import com.eshan.backend.user.dto.ErrorResponse;
-import com.eshan.backend.user.dto.RegisterRequest;
-import com.eshan.backend.user.dto.RegisterResponse;
+import com.eshan.backend.dto.ErrorResponse;
+import com.eshan.backend.dto.RegisterRequest;
+import com.eshan.backend.dto.RegisterResponse;
 import com.eshan.backend.user.entity.User;
 import com.eshan.backend.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
