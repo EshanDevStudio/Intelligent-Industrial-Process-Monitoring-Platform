@@ -1,6 +1,7 @@
 package com.eshan.backend.security.controller;
 
 import com.eshan.backend.dto.ErrorResponse;
+import com.eshan.backend.dto.LoginRequest;
 import com.eshan.backend.dto.RegisterRequest;
 import com.eshan.backend.dto.RegisterResponse;
 import com.eshan.backend.security.service.AuthService;
@@ -37,5 +38,10 @@ public class AuthController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
+    }
+
+    @PostMapping("/login-user")
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
+        return authService.loginUser(loginRequest);
     }
 }
