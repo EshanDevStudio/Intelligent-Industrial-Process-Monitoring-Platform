@@ -4,12 +4,14 @@ import com.eshan.backend.dto.AuthResponse;
 import com.eshan.backend.dto.ErrorResponse;
 import com.eshan.backend.dto.LoginRequest;
 import com.eshan.backend.dto.RegisterRequest;
+import com.eshan.backend.jwt.util.JwtUtil;
 import com.eshan.backend.user.entity.User;
 import com.eshan.backend.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,12 @@ public class AuthService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     public User registerUser(RegisterRequest registerRequest) {
 
@@ -60,7 +68,12 @@ public class AuthService {
                     )
             );
 
-            return ResponseEntity.ok(new AuthResponse("JWT_token", "user_name"));
+            final UserDetails userDetails = customUserDetailsService
+                    .loadUserByUsername(loginRequest.getUsername());
+
+            final String jwt = jwtUtil.generateToken(userDetails);
+
+            return ResponseEntity.ok(new AuthResponse(jwt, userDetails.getUsername()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
