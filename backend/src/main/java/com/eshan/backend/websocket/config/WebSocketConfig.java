@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -17,6 +18,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+import java.security.Principal;
 
 @Configuration
 @EnableWebSocketMessageBroker
@@ -76,8 +79,27 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                         }
                     }
                 }
+
+                if (StompCommand.SUBSCRIBE.equals(accessor.getCommand())) {
+                    String destination = accessor.getDestination();
+                    Principal user = accessor.getUser();
+
+                    // user can only subscribe to their own queue
+                    if (!isAllowedToSubscribe(user, destination)) {
+                        throw new MessagingException("Subscription not authorized");
+                    }
+                }
                 return message;
             }
         });
+    }
+
+    private boolean isAllowedToSubscribe(Principal user, String destination) {
+        // Allow only user-specific queue subscriptions
+        String allowedPrefix = "/user/" + user.getName() + "/queue/";
+        String genericUserQueue = "/user/queue/";
+
+        return destination.startsWith(allowedPrefix)
+                || destination.equals(genericUserQueue + "private");
     }
 }
